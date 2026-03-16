@@ -1,6 +1,6 @@
 ---
 name: read-input-source
-description: Read and normalize human-provided domain input from inline text or files for downstream modeling tasks. Use when domain analysis starts from free-form requirements or documents.
+description: Read and normalize human-provided input from inline text or files for any layer workflow. Use when processing requirements, stories, notices, release scopes, or change requests.
 ---
 
 # Skill: read-input-source
@@ -11,9 +11,9 @@ description: Read and normalize human-provided domain input from inline text or 
 
 ## Purpose
 
-Read and normalize any human-provided domain input — whether an initial business description, a new feature requirement, or a business change — producing a consistent plain-text representation for downstream skills.
+Read and normalize human-provided input across all layers — requirements, stories, notices, release scopes, and change requests — producing a consistent plain-text representation for downstream skills.
 
-No special format is required from the human. The agent infers the intent (initialization vs. feature-driven update) from the content itself.
+No special format is required from the human. The agent infers input type and intent from the content itself.
 
 ---
 
@@ -21,10 +21,12 @@ No special format is required from the human. The agent infers the intent (initi
 
 ### Input
 
-| Parameter     | Type     | Required    | Description                                                                                                           |
-| ------------- | -------- | ----------- | --------------------------------------------------------------------------------------------------------------------- |
-| `inline_text` | `string` | Conditional | Natural language provided directly by the user — may be a domain description, a feature request, or a business change |
-| `file_path`   | `string` | Conditional | Path to a `.md`, `.txt`, `.pdf`, or `.docx` file containing domain or feature content                                 |
+| Parameter              | Type     | Required    | Description                                                                                    |
+| ---------------------- | -------- | ----------- | ---------------------------------------------------------------------------------------------- |
+| `inline_text`          | `string` | Conditional | Natural language input provided directly by the user                                           |
+| `file_path`            | `string` | Conditional | Path to a `.md`, `.txt`, `.pdf`, or `.docx` file                                               |
+| `context_layer`        | `string` | No          | Layer hint (`domain`, `architecture`, `process`, `dev`, `qa`) used to improve intent inference |
+| `expected_input_types` | `array`  | No          | Optional allowed types (`requirement`, `story`, `notice`, `change-request`, `release-scope`)   |
 
 At least one of `inline_text` or `file_path` must be provided. If both are provided, merge them with `file_path` content taking precedence, and note the merge in the output metadata.
 
@@ -35,7 +37,8 @@ At least one of `inline_text` or `file_path` must be provided. If both are provi
   "status": "ok" | "error",
   "source": "inline" | "file" | "merged",
   "file_path": "<path or null>",
-  "inferred_intent": "initialization" | "feature-update" | "unknown",
+   "input_type": "requirement" | "story" | "notice" | "change-request" | "release-scope" | "unknown",
+   "inferred_intent": "initialization" | "update" | "validation" | "query" | "unknown",
   "content": "<normalized plain text>",
   "error": "<error message or null>"
 }
@@ -55,10 +58,11 @@ At least one of `inline_text` or `file_path` must be provided. If both are provi
    - Preserve paragraph structure using blank lines.
    - Do not summarize or interpret — output the raw content faithfully.
 
-3. **Infer intent:**
-   - If no existing `spec/domain/` artifacts are present, set `inferred_intent: initialization`.
-   - If existing artifacts are present and the input describes a new capability, change, or addition, set `inferred_intent: feature-update`.
-   - If intent cannot be determined from content alone, set `inferred_intent: unknown` — the agent will ask the user to clarify before proceeding.
+3. **Infer input type and intent:**
+   - Infer `input_type` from structure and keywords (Story ID, CR format, propagation notice marker, release scope wording).
+   - Infer `inferred_intent` from requested operation (`initialization`, `update`, `validation`, `query`).
+   - If `expected_input_types` is provided and inferred type is outside the allowed set, set `status: error`.
+   - If type or intent cannot be determined confidently, set corresponding value to `unknown` and ask the user to clarify.
 
 4. **Return output object.**
 
@@ -76,9 +80,10 @@ At least one of `inline_text` or `file_path` must be provided. If both are provi
 
 ## Error Codes
 
-| Code                     | Meaning                                              |
-| ------------------------ | ---------------------------------------------------- |
-| `ERR_NO_INPUT`           | Neither inline text nor file path was provided       |
-| `ERR_FILE_NOT_FOUND`     | Specified file path does not exist                   |
-| `ERR_FILE_EMPTY`         | File exists but contains no readable content         |
-| `ERR_FORMAT_UNSUPPORTED` | File format is not `.md`, `.txt`, `.pdf`, or `.docx` |
+| Code                        | Meaning                                              |
+| --------------------------- | ---------------------------------------------------- |
+| `ERR_NO_INPUT`              | Neither inline text nor file path was provided       |
+| `ERR_FILE_NOT_FOUND`        | Specified file path does not exist                   |
+| `ERR_FILE_EMPTY`            | File exists but contains no readable content         |
+| `ERR_FORMAT_UNSUPPORTED`    | File format is not `.md`, `.txt`, `.pdf`, or `.docx` |
+| `ERR_UNEXPECTED_INPUT_TYPE` | Inferred input type is not in `expected_input_types` |
