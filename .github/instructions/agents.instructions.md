@@ -27,7 +27,6 @@ name: 'Agent Display Name'
 tools: ['read', 'edit', 'search']
 model: 'Claude Sonnet 4.5'
 target: 'vscode'
-infer: true
 ---
 ```
 
@@ -66,7 +65,7 @@ infer: true
 - If omitted, agent is available in both environments
 - Use when agent has environment-specific features
 
-#### **infer** (OPTIONAL)
+#### **infer** (DEPRECATED)
 
 - Boolean controlling whether Copilot can automatically use this agent based on context
 - Default: `true` if omitted
