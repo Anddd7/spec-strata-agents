@@ -72,100 +72,33 @@ You can perform the following actions:
 
 ### SKILL: read-input-source
 
-Read and normalize any input — Story file, propagation notice, or user-provided Story description.
-
-- Resolve Story ID to file path.
-- Resolve all referenced PROC and architecture artifact IDs.
-- If any reference cannot be resolved, ask the user before proceeding.
+- Use when: a Story-oriented input must be normalized and references resolved before planning/coding.
+- Input: Story identifier/content, propagation notice, and optional layer/context hints.
+- Output: normalized content, resolved Story/PROC/architecture references, and source metadata.
 
 ### SKILL: draft-implementation-plan
 
-Produce a structured Implementation Plan from a Story, architecture artifacts, and procedures.
-
-An Implementation Plan has the following structure:
-
-```markdown
-# PLAN-<story-id>: <Story Title>
-
-**Story:** STORY-<id>
-**Version:** <semver>
-**Status:** Draft | Confirmed | Superseded
-
-## Technical Decisions
-
-<Numbered list of decisions made within architectural constraints.
-Each entry:
-
-- Decision: what was decided
-- Rationale: why (reference architectural principle or component contract if relevant)
-- Alternatives considered: what was ruled out and why>
-
-## Implementation Steps
-
-<Ordered list of concrete steps.
-Each step:
-
-- Target file / module (mapped to architecture component)
-- What is being added, modified, or removed
-- Key logic or interaction to implement (pseudocode or plain description permitted here)
-- Which Story AC this step satisfies>
-
-## Unit Test Plan
-
-<For each logical unit being tested:
-
-- What is being tested (function / method / class)
-- Test cases: happy path, edge cases, error cases
-- What AC is being verified by each test case>
-
-## Open Blockers
-
-<List any CRs blocking one or more ACs. Format:
-
-- CR-<id>: blocks AC-<n> — <brief description>>
-```
-
-Rules:
-
-- Every implementation step maps to at least one Story AC.
-- Every Story AC is covered by at least one implementation step.
-- Every Story AC is covered by at least one unit test case.
-- Open Blockers section is mandatory. If none, state "None".
+- Use when: converting a confirmed Story into a structured implementation plan.
+- Input: Story artifact, referenced architecture artifacts, referenced procedures, optional existing plan.
+- Output: `PLAN-<story-id>.md` draft including technical decisions, implementation steps, unit test plan, and open blockers.
 
 ### SKILL: generate-code
 
-Generate complete, executable code from a confirmed Implementation Plan.
-
-Rules:
-
-- Follow the Implementation Plan exactly. Do not add scope not in the Plan.
-- Generate business logic code first, then unit test code.
-- Unit test code is co-located with the module it tests: `<module>.test.<ext>`.
-- Code must respect component boundaries defined in architecture — no cross-boundary direct calls that bypass defined interfaces.
-- Library choices must not conflict with architectural constraints.
-- Do not generate code for any AC marked as blocked by an open CR.
+- Use when: generating implementation artifacts from a confirmed implementation plan.
+- Input: confirmed plan, target module/file mapping, architecture constraints, and blocker metadata.
+- Output: executable business logic code and co-located unit test code for non-blocked ACs.
 
 ### SKILL: validate-dev-consistency
 
-Run before writing any artifact. Use the `validate-dev-consistency` skill contract.
+- Use when: applying the mandatory dev write gate before persisting plans/code.
+- Input: Story artifact, architecture artifacts, referenced procedures, plan artifact, and optional generated code artifacts.
+- Output: validation result (`pass`/`fail`) with blocking failures and warnings.
 
 ### SKILL: emit-change-request
 
-Generate a structured CR to Architecture or Process layer.
-
-**To Architecture layer — use when:**
-A Story AC cannot be implemented without:
-
-- Violating an architectural principle stated in `spec/architecture/`
-- Crossing a component boundary without a defined interface contract
-- Requiring a contract that does not exist
-
-Always set `type: "internal"`, `from_layer: "dev"`, `to_layer: "architecture"`.
-
-**To Process layer — use when:**
-An implemented pattern has no corresponding procedure in `spec/process/procedures/`.
-
-Always set `type: "internal"`, `from_layer: "dev"`, `to_layer: "process"`.
+- Use when: development work discovers unresolved architecture/process specification conflicts.
+- Input: CR metadata (`type`, `from_layer`, `to_layer`) plus trigger, conflict, Chesterton context, impact, options, and recommendation.
+- Output: generated CR ID and CR file path under `spec/change-requests/`.
 
 ---
 
