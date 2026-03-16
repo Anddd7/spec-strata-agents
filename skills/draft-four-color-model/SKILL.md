@@ -29,15 +29,7 @@ Analyze a normalized domain description and classify all identified domain objec
 ```json
 {
   "status": "ok" | "error",
-  "objects": [
-    {
-      "name": "<PascalCase term>",
-      "color": "MI" | "Role" | "Desc" | "PPT",
-      "definition": "<one sentence>",
-      "confidence": "high" | "medium" | "low",
-      "confidence_note": "<reason if medium or low>"
-    }
-  ],
+  "objects_table": "<markdown table with columns: Name, Color, Definition, Confidence, ConfidenceNote>",
   "mermaid_diagram": "<mermaid classDiagram string>",
   "error": "<error message or null>"
 }
@@ -78,6 +70,11 @@ Analyze a normalized domain description and classify all identified domain objec
 
 ```
 classDiagram
+  classDef mi fill:#ffe5e5,stroke:#cc0000,stroke-width:1.5px,color:#111
+  classDef role fill:#fff6cc,stroke:#c9a300,stroke-width:1.5px,color:#111
+  classDef desc fill:#e5f1ff,stroke:#1f6fb2,stroke-width:1.5px,color:#111
+  classDef ppt fill:#e7f8e7,stroke:#2e8b57,stroke-width:1.5px,color:#111
+
   class Order {
     <<MI>>
   }
@@ -90,6 +87,12 @@ classDiagram
   class ProductSpec {
     <<Desc>>
   }
+
+  class Order mi
+  class Customer role
+  class Person ppt
+  class ProductSpec desc
+
   Order --> Customer : involves
   Customer --> Person : played by
   Order --> ProductSpec : follows
@@ -101,7 +104,8 @@ classDiagram
 
 | Check                      | Rule                                                                      |
 | -------------------------- | ------------------------------------------------------------------------- |
+| Object table format        | `objects_table` must be a valid Markdown table with required columns      |
 | No unclassified objects    | Every extracted concept must have exactly one color                       |
 | No duplicate names         | Object names must be unique (case-insensitive)                            |
-| Relationship targets exist | Every relationship must reference objects present in the `objects` list   |
+| Relationship targets exist | Every relationship must reference objects present in the object table     |
 | Low-confidence flagged     | Any object with `confidence: low` must have a non-empty `confidence_note` |
