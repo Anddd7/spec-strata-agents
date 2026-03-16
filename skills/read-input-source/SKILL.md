@@ -39,6 +39,12 @@ At least one of `inline_text` or `file_path` must be provided. If both are provi
   "file_path": "<path or null>",
    "input_type": "requirement" | "story" | "notice" | "change-request" | "release-scope" | "unknown",
    "inferred_intent": "initialization" | "update" | "validation" | "query" | "unknown",
+   "resolved_references": {
+      "story_ids": ["STORY-<id>", "..."],
+      "procedure_ids": ["PROC-<id>", "..."],
+      "architecture_refs": ["<artifact-id>", "..."],
+      "files": ["<resolved path>", "..."]
+   },
   "content": "<normalized plain text>",
   "error": "<error message or null>"
 }
@@ -64,7 +70,13 @@ At least one of `inline_text` or `file_path` must be provided. If both are provi
    - If `expected_input_types` is provided and inferred type is outside the allowed set, set `status: error`.
    - If type or intent cannot be determined confidently, set corresponding value to `unknown` and ask the user to clarify.
 
-4. **Return output object.**
+4. **Resolve references (when applicable):**
+   - If content includes `STORY-<id>`, resolve to Story file paths.
+   - If content includes `PROC-<id>`, resolve to Procedure file paths.
+   - If content references architecture artifacts, resolve identifiers/paths where possible.
+   - If any required reference cannot be resolved, set `status: error` and ask for clarification.
+
+5. **Return output object.**
 
 ---
 
@@ -80,10 +92,11 @@ At least one of `inline_text` or `file_path` must be provided. If both are provi
 
 ## Error Codes
 
-| Code                        | Meaning                                              |
-| --------------------------- | ---------------------------------------------------- |
-| `ERR_NO_INPUT`              | Neither inline text nor file path was provided       |
-| `ERR_FILE_NOT_FOUND`        | Specified file path does not exist                   |
-| `ERR_FILE_EMPTY`            | File exists but contains no readable content         |
-| `ERR_FORMAT_UNSUPPORTED`    | File format is not `.md`, `.txt`, `.pdf`, or `.docx` |
-| `ERR_UNEXPECTED_INPUT_TYPE` | Inferred input type is not in `expected_input_types` |
+| Code                        | Meaning                                                            |
+| --------------------------- | ------------------------------------------------------------------ |
+| `ERR_NO_INPUT`              | Neither inline text nor file path was provided                     |
+| `ERR_FILE_NOT_FOUND`        | Specified file path does not exist                                 |
+| `ERR_FILE_EMPTY`            | File exists but contains no readable content                       |
+| `ERR_FORMAT_UNSUPPORTED`    | File format is not `.md`, `.txt`, `.pdf`, or `.docx`               |
+| `ERR_UNEXPECTED_INPUT_TYPE` | Inferred input type is not in `expected_input_types`               |
+| `ERR_REFERENCE_UNRESOLVED`  | Required Story/Procedure/architecture reference cannot be resolved |
