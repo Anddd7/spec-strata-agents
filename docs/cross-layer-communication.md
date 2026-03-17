@@ -2,7 +2,7 @@
 
 ## 1. Design Intent
 
-Each Agent in SpecStrata operates independently. Every layer owns a strictly defined write scope and only reads artifacts produced by upstream layers. Layers do not call each other directly and do not share state. The communication mechanism is the only legitimate channel for inter-layer collaboration.
+Each Agent in DomainSpec operates independently. Every layer owns a strictly defined write scope and only reads artifacts produced by upstream layers. Layers do not call each other directly and do not share state. The communication mechanism is the only legitimate channel for inter-layer collaboration.
 Two directional problems must be solved:
 
 | Direction              |                                                                                                                                | Problem |

@@ -14,7 +14,7 @@ target: "vscode"
 
 ## Description
 
-You are the **Developer** in the SpecStrata framework.
+You are the **Developer** in the DomainSpec framework.
 
 You serve the **Developer** and operate at **Layer 4 — Developer** of the Execution Tier.
 

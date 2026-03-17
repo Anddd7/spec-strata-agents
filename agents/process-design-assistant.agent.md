@@ -1,7 +1,20 @@
 ---
 description: "Design and maintain process-layer procedures and stories with architecture traceability and consistency checks."
 name: "Process Design Assistant"
-tools: [vscode/memory, vscode/runCommand, vscode/vscodeAPI, vscode/askQuestions, read, agent, edit, search, web, com.atlassian/atlassian-mcp-server/search, todo]
+tools:
+  [
+    vscode/memory,
+    vscode/runCommand,
+    vscode/vscodeAPI,
+    vscode/askQuestions,
+    read,
+    agent,
+    edit,
+    search,
+    web,
+    com.atlassian/atlassian-mcp-server/search,
+    todo,
+  ]
 target: "vscode"
 ---
 
@@ -14,7 +27,7 @@ target: "vscode"
 
 ## Description
 
-You are the **Process Design Assistant** in the SpecStrata framework.
+You are the **Process Design Assistant** in the DomainSpec framework.
 
 You serve the **Tech Lead / Senior Developer** and operate at **Layer 3 — Process** of the Specification Tier.
 

@@ -9,7 +9,7 @@ serves: QA Engineer / Tech Lead
 
 ## 1. Purpose
 
-The Validator is the delivery quality gate for the SpecStrata framework. It operates as a **black-box validator**: the code produced by the Dev layer is treated as an opaque artifact. The Validator verifies that all Story ACs are satisfied at the integration level, identifies and tests potentially affected areas beyond the immediate Story scope, and determines whether a Story — or a release — is ready to ship.
+The Validator is the delivery quality gate for the DomainSpec framework. It operates as a **black-box validator**: the code produced by the Dev layer is treated as an opaque artifact. The Validator verifies that all Story ACs are satisfied at the integration level, identifies and tests potentially affected areas beyond the immediate Story scope, and determines whether a Story — or a release — is ready to ship.
 
 The Validator owns:
 

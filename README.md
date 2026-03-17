@@ -1,6 +1,6 @@
-# SpecStrata
+# DomainSpec
 
-_SpecStrata is a layered specification framework for agent-collaborative software development._
+_DomainSpec is a layered specification framework for agent-collaborative software development._
 
 It combines domain modeling discipline with standardized delivery workflows so teams can define clear rules first, then execute and validate consistently with agents.
 
@@ -8,13 +8,13 @@ It combines domain modeling discipline with standardized delivery workflows so t
 
 ### From DDD: Domain Decomposition
 
-SpecStrata borrows strategic Domain-Driven Design thinking - bounded contexts, domain events, ubiquitous language, and context mapping - as the foundation of each project. Before code starts, business concepts and boundaries are clarified as shared domain artifacts.
+DomainSpec borrows strategic Domain-Driven Design thinking - bounded contexts, domain events, ubiquitous language, and context mapping - as the foundation of each project. Before code starts, business concepts and boundaries are clarified as shared domain artifacts.
 
 ### From Manufacturing: Process Standardization
 
-In manufacturing, each station follows a defined process with clear inputs, outputs, and quality checks. SpecStrata applies the same discipline to software delivery by defining repeatable Process Specs and task flows for agent execution.
+In manufacturing, each station follows a defined process with clear inputs, outputs, and quality checks. DomainSpec applies the same discipline to software delivery by defining repeatable Process Specs and task flows for agent execution.
 
-## Why Use SpecStrata
+## Why Use DomainSpec
 
 - Turn implicit engineering decisions into explicit, auditable specs.
 - Reduce implementation drift by enforcing layer responsibilities.
@@ -22,7 +22,7 @@ In manufacturing, each station follows a defined process with clear inputs, outp
 
 ## How It Works (At A Glance)
 
-SpecStrata organizes delivery into two tiers.
+DomainSpec organizes delivery into two tiers.
 
 - Specification Tier (human-led, agent-assisted)
   - Layer 1: Domain (Domain Expert + Domain Analysis Assistant)

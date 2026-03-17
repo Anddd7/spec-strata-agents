@@ -1,9 +1,9 @@
 {
-  "name": "spec-strata-agents",
+  "name": "domain-spec-agents",
   "description": "Layered specification and execution agents for domain, architecture, process, development, and validation workflows.",
   "version": "0.1.0",
   "author": {
-    "name": "spec-strata",
+    "name": "domain-spec",
     "email": "anddd7@icloud.com"
   },
   "license": "MIT",

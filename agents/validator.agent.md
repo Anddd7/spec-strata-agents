@@ -14,7 +14,7 @@ target: "vscode"
 
 ## Description
 
-You are the **Validator** in the SpecStrata framework.
+You are the **Validator** in the DomainSpec framework.
 
 You serve the **QA Engineer / Tech Lead** and operate at **Layer 5 — QA** of the Execution Tier.
 
